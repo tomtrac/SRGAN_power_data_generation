@@ -144,7 +144,7 @@ class SRGAN():
             if epoch % print_interval == 0:
                 print("%d [D loss: %f, acc.: %.2f%%] [G loss: %s][D loss real: %s] [D loss fake: %s]" %
                       (epoch, d_loss[0], 100 * d_loss[1], g_loss, d_loss_real, d_loss_fake))
-                self.save_model(epoch + 1)
+                self.save_model(epoch)
 
 
     def save_model(self, epoch):
@@ -160,10 +160,9 @@ class SRGAN():
 
         save(self.generator, "gan_generator")
         save(self.discriminator, "gan_discriminator")
-        save(self.combined, "gan_adversarial")
         save(self.generator, "gan_generator_%s" % epoch)
         save(self.discriminator, "gan_discriminator_%s" % epoch)
-        save(self.combined, "gan_adversarial_%s" % epoch)
+
 
 
 
@@ -178,10 +177,10 @@ if __name__ == '__main__':
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
     if clear_folder is True:
-        filelist = [f for f in os.listdir(model_dir) if f.endswith(".png") or f.endswith(".hdf5") or f.endswith(".json")]
+        filelist = [f for f in os.listdir(model_dir) if f.endswith(".hdf5") or f.endswith(".json")]
         for f in filelist:
             os.remove(os.path.join(model_dir, f))
     no_up, up_row_list, up_col_list, lr_height, lr_width = resolution_model_params(input_resolution)
     gan = SRGAN(data_type, model_dir, no_up, up_row_list, up_col_list, train_data_file_name, continue_train=False, input_resolution=input_resolution,
                 output_resolution=output_resolution, lr_height=lr_height, lr_width=lr_width)
-    gan.train(epochs=20000, batch_size=batch_size, print_interval=200, data_type=data_type, continue_train=False)
+    gan.train(epochs=20000, batch_size=batch_size, print_interval=5000, data_type=data_type)
