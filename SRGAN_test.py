@@ -1,3 +1,6 @@
+'''
+perform model inference from trained model
+'''
 from SRGAN_train import SRGAN
 import os
 import numpy as np
@@ -10,6 +13,16 @@ pretrained_model_dir = 'pre_trained_models/'
 
 
 def model_inference(data_type, input_resolution, output_resolution, evaluation_data_file_name, load_pre_trained_model=True):
+    '''
+    interpolate 5-minute PV/load power data from 30-minute/hourly measurements using trained SRGAN model.
+    :param data_type: pv or load data
+    :param input_resolution: input temporal resolution, 1800 represents 30-minute resolution,
+    3600 represents hourly resolution
+    :param output_resolution: output temporal resolution, 300 represents 5-minute resolution
+    :param evaluation_data_file_name: file name of the input low resolution data
+    :param load_pre_trained_model: whether to load pretrained model from pre_trained_models/
+    :return: interpolated data
+    '''
     no_up, up_row_list, up_col_list, lr_height, lr_width = resolution_model_params(input_resolution)
     if load_pre_trained_model:
         if input_resolution == 1800:

@@ -1,4 +1,5 @@
 '''
+Model architectures of the residual block, upsampling block, generator and discriminator
 The original codes are from https://github.com/deepak112/Keras-SRGAN/blob/master/Network.py
 
 '''
@@ -70,8 +71,8 @@ def Generator(noise_shape, gf, n_residual_blocks, channels, no_up, up_row_list, 
     return generator_model
 
 
-def Discriminator(image_shape):
-    dis_input = Input(shape=image_shape)
+def Discriminator(input_shape):
+    dis_input = Input(shape=input_shape)
     model = ZeroPadding2D(padding=((0, 0), (2, 2)))(dis_input)
     model = Conv2D(filters=64, kernel_size=3, strides=1, padding="same")(model)
     model = LeakyReLU(alpha=0.2)(model)
@@ -90,6 +91,7 @@ def Discriminator(image_shape):
 
 
 def resolution_model_params(input_resolution):
+    # input_resolution of 1800 represents 30-minute resolution, 3600 represents hourly resolution
     if input_resolution == 1800:
         no_up, up_row_list, up_col_list, lr_height, lr_width = 1, [3], [2], 8, 6
     elif input_resolution == 3600:

@@ -1,3 +1,8 @@
+'''
+Train the SRGAN model
+The original codes are from https://github.com/deepak112/Keras-SRGAN/blob/master/Network.py
+and https://github.com/eriklindernoren/Keras-GAN/blob/master/dcgan/dcgan.py
+'''
 from __future__ import print_function, division
 from keras.layers import Input
 from keras.models import Model, model_from_json
@@ -70,11 +75,13 @@ class SRGAN():
             self.combined = get_gan_network(self.discriminator, self.lr_shape, self.generator, optimizer)
         else:
             if con_epoch is None:
+                # starting from last saved model
                 discriminator_model = model_dir + "gan_discriminator.json"
                 discriminator_weights = model_dir + "gan_discriminator_weights.hdf5"
                 generator_model = model_dir + "gan_generator.json"
                 generator_weights = model_dir + "gan_generator_weights.hdf5"
             else:
+                # starting from a specific training step
                 discriminator_model = model_dir + "gan_discriminator_%s.json" % con_epoch
                 discriminator_weights = model_dir + "gan_discriminator_%s_weights.hdf5" % con_epoch
                 generator_model = model_dir + "gan_generator_%s.json" % con_epoch
@@ -148,7 +155,7 @@ class SRGAN():
 
 
     def save_model(self, epoch):
-
+        # save model in local dir
         def save(model, model_name):
             model_path = model_dir + "%s.json" % model_name
             weights_path = model_dir + "%s_weights.hdf5" % model_name
